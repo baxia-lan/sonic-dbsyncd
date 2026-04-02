@@ -1,39 +1,13 @@
-"""
-SONiC DB sync daemon — BUILD.bazel added on claude branch.
+"""sonic-dbsyncd Python wheel — migrated from rules/sonic-dbsyncd.mk."""
 
-Migration status: Phase 1 Bazel migration.
-Build type: Python setuptools → .whl + .deb
-"""
-
-load("@rules_python//python:defs.bzl", "py_library")
 load("//rules/bazel/wheel:wheel.bzl", "sonic_wheel")
-load("//rules/bazel/deb:deb.bzl", "deb_package_set")
 
 package(default_visibility = ["//visibility:public"])
 
-filegroup(
-    name = "all_srcs",
-    srcs = glob(
-        ["**/*.py", "setup.py", "setup.cfg", "pyproject.toml",
-         "debian/**/*", "*.cfg", "*.toml"],
-        exclude = [".git/**", "__pycache__/**", "*.pyc"],
-    ),
-)
-
 sonic_wheel(
-    name = "sonic-dbsyncd_wheel",
+    name = "dbsyncd_wheel",
     distribution = "sonic-dbsyncd",
-    version = "$(PKG_VERSION)",
-    deps = [":all_srcs"],
+    version = "2.0.0",
+    summary = "SONiC database synchronization daemon.",
     visibility = ["//visibility:public"],
 )
-
-deb_package_set(
-    name = "sonic-dbsyncd_debs",
-    srcs = [":all_srcs"],
-    debian_dir = "debian",
-    version = "$(PKG_VERSION)",
-    declared_outputs = ["sonic-dbsyncd.deb"],
-    visibility = ["//visibility:public"],
-)
-
